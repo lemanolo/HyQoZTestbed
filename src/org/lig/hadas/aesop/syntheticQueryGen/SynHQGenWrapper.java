@@ -1,4 +1,5 @@
 package org.lig.hadas.aesop.syntheticQueryGen;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -8,11 +9,14 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
+import org.lig.hadas.aesop.experiments.Experiments;
+import org.lig.hadas.hybridqp.QEPBuilder;
 
-public class QuerySignatureGenerator {
+public class SynHQGenWrapper {
+	private DecimalFormat format = new DecimalFormat( "###.00%" );
 
 	private ArrayList<QueryGenerationListener> listeners;
-	public QuerySignatureGenerator() {
+	public SynHQGenWrapper() {
 		this.listeners = new ArrayList<QueryGenerationListener>();
 	}
 
@@ -37,7 +41,7 @@ public class QuerySignatureGenerator {
 		int minNumberOfDSs = Integer.valueOf(cmd.getOptionValue("n"));
 		int maxNumberOfDSs = Integer.valueOf(cmd.getOptionValue("N"));
 
-		QuerySignatureGenerator generator = new QuerySignatureGenerator();
+		SynHQGenWrapper generator = new SynHQGenWrapper();
 
 		//		for (int DSs = minNumberOfDSs; DSs <= maxNumberOfDSs; DSs++) {
 		//			ArrayList<Query> al= generator.generateQuerySignatures(DSs);
@@ -49,13 +53,13 @@ public class QuerySignatureGenerator {
 	public HashMap<Integer, ArrayList<Query>> generateQuerySignatures(int n, int N) {
 		HashMap<Integer, ArrayList<Query>> queries = new HashMap<Integer, ArrayList<Query>>();
 		for (Integer DSs = n; DSs <= N; DSs++) {
-			queries.put(DSs, generateQuerySignatures(DSs));
+			queries.put(DSs, generateSyntheticHQsFor(DSs));
 		}
 		return queries;
 	}
-	public ArrayList<Query> generateQuerySignatures(int numberOfDSs) {
+	public ArrayList<Query> generateSyntheticHQsFor(int numberOfDSs) {
 		ArrayList<Query> result = new ArrayList<Query>();
-//		int length = this.totalOfQueries(numberOfDSs);
+		//		int length = this.totalOfQueries(numberOfDSs);
 		//		Query [] result  = new Query [this.totalOfQueries(numberOfDSs)];
 
 		int numberOfBindJoins;
@@ -64,13 +68,20 @@ public class QuerySignatureGenerator {
 		int numberOfNonBlockingProjections;
 		int numberOfBlockingProjections;
 		//		System.out.println("#ofDSs: "+numberOfDSs +"\t #ofQueries: "+length);
-		int i = 1;
+		int count = 0;
+		//
+		QEPBuilder builder = new QEPBuilder(Experiments.serviceInstancesFileName, Experiments.serviceInterfacesFileName);
+		//
 		for(numberOfBindJoins=0; 
 				numberOfBindJoins <numberOfDSs; 
 				numberOfBindJoins++){
 			numberOfJoins = numberOfDSs-numberOfBindJoins -1;
-			for (numberOfFilterings = 0;  
-					numberOfFilterings <= numberOfDSs; 
+
+			for (numberOfFilterings = 0;
+					//BEGIN filterings
+					//numberOfFilterings <= 0; //filterings only add complexity to the generation but they do not affect the proper aspects of the qw generation (e.g. deadlock relations)
+										numberOfFilterings <= numberOfDSs; 
+					//END filterings
 					numberOfFilterings++) {
 				for (numberOfBlockingProjections = 0; 
 						numberOfBlockingProjections <= numberOfDSs;
@@ -81,14 +92,47 @@ public class QuerySignatureGenerator {
 
 
 						try {
-							Query q=new Query(numberOfDSs, 
-									numberOfBindJoins, 
-									numberOfJoins, 
-									numberOfFilterings, 
-									numberOfBlockingProjections, 
-									numberOfNonBlockingProjections);
-							result.add(q);
-							this.notifyListeners(q);
+
+							boolean cyclic = true;
+							int tries = 0;
+							Query q =null;
+							int threshold = 1;
+							while(cyclic && tries < threshold){
+								tries++;
+								//								try {
+								q=new Query(numberOfDSs, 
+										numberOfBindJoins, 
+										numberOfJoins, 
+										numberOfFilterings, 
+										numberOfBlockingProjections, 
+										numberOfNonBlockingProjections);
+
+								//									QEPNode root = builder.constructQEP(q.getHqsl());
+								//									QueryWorkflow qw = builder.getQW(root);
+								//									String qwFunctor=qw.toFunctor().replaceAll("\n", "").replaceAll("[ |\t]+", " ");
+
+								cyclic=false;
+								result.add(q);
+								this.notifyListeners(q);
+								//									System.out.println("     ok "+q.getCreationInstruction());
+								count++;
+
+								double progress = ((double)count)/((double)this.totalOfQueries(numberOfDSs));
+								System.out.println(String.format("%s", format.format(progress)));
+
+
+								//								} catch (CyclicHypergraphException e) {
+								//									System.out.println("["+tries+"] cyclic "+q.getCreationInstruction());
+								//									System.out.println("["+tries+"] cyclic "+q.getHqsl());
+								//									cyclic=true;
+								//									Toolkit.getDefaultToolkit().beep();
+								//									
+								//									if(tries==threshold) this.notifyListeners(q);
+								//									
+								//									q=null;
+								//								}
+							}
+
 
 						} catch (PrologGeneratorException e) {
 							e.printStackTrace();
@@ -118,10 +162,16 @@ public class QuerySignatureGenerator {
 		}
 	}
 	public int totalOfQueries(int numberOfDSs){
+		//BEGIN filterings
 		return (int)( numberOfDSs* 
-				     (numberOfDSs+1)* 
-				     ((numberOfDSs+1)*(numberOfDSs+2)/2)
-				    );
+				(numberOfDSs+1)* 
+				((numberOfDSs+1)*(numberOfDSs+2)/2)
+				);
+//		return (int)( numberOfDSs* 
+//				//(numberOfDSs+1)* //filtering 
+//				((numberOfDSs+1)*(numberOfDSs+2)/2)
+//				);
+		//END filterings
 	}
 }
 

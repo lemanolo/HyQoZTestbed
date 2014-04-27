@@ -24,9 +24,9 @@ public class Query {
 	private String hqsl_string;
 
 	private static String plDir          ="/Users/aguacatin/Research/HADAS/PhD/Prolog/qw_generation";
-	private static String configLayout   =plDir+"/config_generation.pl.layout";
-	private static String condigFileName =plDir+"/config_generation.pl";
-	private static String generationScript = plDir+"/generate.sh";
+	private static String configLayout   =plDir+"/config_SynHQGen.pl.layout";
+	private static String condigFileName =plDir+"/config_SynHQGen.pl";
+	private static String generationScript = plDir+"/launchSynHQGen.sh";
 
 	private static String NUMBER_OF_DS_KEY                   = "NumberOfDS";
 	private static String NUMBER_OF_BINDINGS_KEY             = "NumberOfBindings";
@@ -34,7 +34,6 @@ public class Query {
 	private static String NUMBER_OF_FILTERINGS               = "NumberOfFilterings";
 	private static String NUMBER_OF_BLOCKING_PROJECTIONS     = "NumberOfBlockingProjetions";
 	private static String NUMBER_OF_NON_BLOCKING_PROJECTIONS = "NumberOfNonBlockingProjections";
-	private static String OUTPUT_FILE_NAME_KEY               = "OutputFileName";
 
 	public Query(int numberOfDSs,        
 			int numberOfJoins, 
@@ -55,9 +54,9 @@ public class Query {
 		this.sco_string = sco;
 		this.hqsl_string = hsql;
 	}
-	public Query(int numberOfDSs,        
-			int numberOfJoins, 
+	public Query(int numberOfDSs,
 			int numberOfBindJoins,
+			int numberOfJoins, 
 			int numberOfFilterings, 
 			int numberOfBlockingProjections,
 			int numberOfNonBlockingProjections) throws PrologGeneratorException {
@@ -93,8 +92,7 @@ public class Query {
 					replaceAll(NUMBER_OF_JOINS_KEY,                String.valueOf(this.numberOfJoins)).
 					replaceAll(NUMBER_OF_FILTERINGS,               String.valueOf(this.numberOfFilterings)).
 					replaceAll(NUMBER_OF_BLOCKING_PROJECTIONS,     String.valueOf(this.numberOfBlockingProjections)).
-					replaceAll(NUMBER_OF_NON_BLOCKING_PROJECTIONS, String.valueOf(this.numberOfNonBlockingProjections)).
-					replaceAll(OUTPUT_FILE_NAME_KEY,   		       this.outputFileName);
+					replaceAll(NUMBER_OF_NON_BLOCKING_PROJECTIONS, String.valueOf(this.numberOfNonBlockingProjections));
 			//System.out.println("CONFIG: \n"+this.configString);
 			bw = new BufferedWriter(new FileWriter(condigFileName));
 			bw.write(this.configString);
@@ -112,7 +110,7 @@ public class Query {
 						this.sco_string=line.replaceAll("::", ".").replaceAll(" *SCO *= *", "");
 						//						System.out.println(" sco_string:\t"+this.sco_string);
 					}else if(line.startsWith("HSQL")){
-						this.hqsl_string=line.replaceAll(" *HSQL *= *", "")+";";
+						this.hqsl_string=line.replaceAll(" *HSQL *= *", "");
 						//						System.out.println("hsql_string:\t"+this.hqsl_string);
 					}
 					else if(line.startsWith("TRY")) System.err.println(line);

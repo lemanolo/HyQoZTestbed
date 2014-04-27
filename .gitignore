@@ -22,3 +22,16 @@ SyntheticQueries/*
 QueryWorkflowsDir/*
 stdOut.txt
 perfOut.txt
+SyntheticHQs/10_DSs.txt
+SyntheticHQs/11_DSs.txt
+SyntheticHQs/12_DSs.txt
+SyntheticHQs/1_DSs.txt
+SyntheticHQs/2_DSs.txt
+SyntheticHQs/3_DSs.txt
+SyntheticHQs/4_DSs.txt
+SyntheticHQs/5_DSs.txt
+SyntheticHQs/6_DSs.txt
+SyntheticHQs/7_DSs.txt
+SyntheticHQs/8_DSs.txt
+SyntheticHQs/9_DSs.txt
+SyntheticHQs/tmp

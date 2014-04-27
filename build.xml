@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project Experiments">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <target name="create_run_jar">
+        <jar destfile="/Users/aguacatin/Research/HADAS/workspace_aesop/Experiments/Experiments.jar" filesetmanifest="mergewithoutmain">
+            <manifest>
+                <attribute name="Main-Class" value="org.lig.hadas.aesop.experiments.Experiments"/>
+                <attribute name="Class-Path" value="."/>
+            </manifest>
+            <fileset dir="/Users/aguacatin/Research/HADAS/workspace_aesop/Experiments/bin"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/development/commons-cli-1.2/commons-cli-1.2.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/development/commons-configuration-1.9/commons-configuration-1.9.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/development/commons-collections-3.2.1/commons-collections-3.2.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/development/commons-logging-1.1.1/commons-logging-1.1.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/development/commons-lang-2.6/commons-lang-2.6.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/development/guava-14-rc1.jar"/>
+            <fileset dir="/Users/aguacatin/Research/HADAS/workspace_hypatia/Hypatia/bin"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/Research/HADAS/workspace_hypatia/Hypatia/lib/asminterpreter.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/Research/HADAS/workspace_hypatia/Hypatia/lib/asmworkflow.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/Research/HADAS/workspace_hypatia/Hypatia/lib/calendarqueuestubs.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/Research/HADAS/workspace_hypatia/Hypatia/lib/distance.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/Research/HADAS/workspace_hypatia/Hypatia/lib/hashindexstubs.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/Research/HADAS/workspace_hypatia/Hypatia/lib/hsqlparser.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/Research/HADAS/workspace_hypatia/Hypatia/lib/interestsstubs.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/Research/HADAS/workspace_hypatia/Hypatia/lib/jgraph.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/Research/HADAS/workspace_hypatia/Hypatia/lib/jgraphlayout.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/Research/HADAS/workspace_hypatia/Hypatia/lib/JSONJava.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/Research/HADAS/workspace_hypatia/Hypatia/lib/linkedqueuestubs.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/Research/HADAS/workspace_hypatia/Hypatia/lib/profilestubs.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/Research/HADAS/workspace_hypatia/Hypatia/lib/servicecatalog.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/Research/HADAS/workspace_hypatia/Hypatia/lib/streamgateway.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/Research/HADAS/workspace_hypatia/Hypatia/lib/uinterestsstubs.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/development/jaxws-ri-20090416/lib/activation.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/development/jaxws-ri-20090416/lib/FastInfoset.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/development/jaxws-ri-20090416/lib/http.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/development/jaxws-ri-20090416/lib/jaxb-api.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/development/jaxws-ri-20090416/lib/jaxb-impl.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/development/jaxws-ri-20090416/lib/jaxb-xjc.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/development/jaxws-ri-20090416/lib/jaxws-api.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/development/jaxws-ri-20090416/lib/jsr181-api.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/development/jaxws-ri-20090416/lib/jsr250-api.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/development/jaxws-ri-20090416/lib/servlet.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/development/jaxws-ri-20090416/lib/saaj-api.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/development/jaxws-ri-20090416/lib/saaj-impl.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/development/jaxws-ri-20090416/lib/jsr173_api.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/development/jaxws-ri-20090416/lib/woodstox.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/development/jaxws-ri-20090416/lib/resolver.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/development/jaxws-ri-20090416/lib/stax-ex.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/development/jaxws-ri-20090416/lib/streambuffer.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/development/jaxws-ri-20090416/lib/jaxws-rt.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/development/jaxws-ri-20090416/lib/jaxws-tools.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/development/jaxws-ri-20090416/lib/mimepull.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/Research/HADAS/workspace_hypatia/Hypatia/lib/ant-antlr3.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/Research/HADAS/workspace_hypatia/Hypatia/lib/antlrworks-1.4.3.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/Research/HADAS/workspace_hypatia/Hypatia/lib/btreeindex.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/Research/HADAS/workspace_hypatia/Hypatia/lib/rtreeindex.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/Research/HADAS/workspace_hypatia/Hypatia/lib/btreeindexstubs.jar"/>
+            <fileset dir="/Users/aguacatin/development/jaxws-ri"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/Research/HADAS/workspace_hypatia/Hypatia/lib/fr.cnrs.liris.ds.api.format-0.4.1.SNAPSHOT.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/Research/HADAS/workspace_hypatia/Hypatia/lib/fr.cnrs.liris.ds.model-0.4.1.SNAPSHOT.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/Research/HADAS/workspace_hypatia/Hypatia/lib/datastream.jar"/>
+            <fileset dir="/Users/aguacatin/Research/HADAS/workspace_aesop/org.lig.hadas.aesop.qwderivation/bin"/>
+            <fileset dir="/Users/aguacatin/development/gnuprologjava/src"/>
+            <zipfileset excludes="META-INF/*.SF" src="/Users/aguacatin/development/jgraphx/lib/jgraphx.jar"/>
+        </jar>
+    </target>
+</project>
