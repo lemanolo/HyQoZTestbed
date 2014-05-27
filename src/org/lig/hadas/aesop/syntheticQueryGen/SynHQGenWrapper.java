@@ -9,8 +9,6 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
-import org.lig.hadas.aesop.experiments.Experiments;
-import org.lig.hadas.hybridqp.QEPBuilder;
 
 public class SynHQGenWrapper {
 	private DecimalFormat format = new DecimalFormat( "###.00%" );
@@ -36,6 +34,7 @@ public class SynHQGenWrapper {
 			System.err.println(exp.getMessage());
 			return;
 		}
+		@SuppressWarnings("unused")
 		HelpFormatter formatter = new HelpFormatter();
 
 		int minNumberOfDSs = Integer.valueOf(cmd.getOptionValue("n"));
@@ -70,7 +69,7 @@ public class SynHQGenWrapper {
 		//		System.out.println("#ofDSs: "+numberOfDSs +"\t #ofQueries: "+length);
 		int count = 0;
 		//
-		QEPBuilder builder = new QEPBuilder(Experiments.serviceInstancesFileName, Experiments.serviceInterfacesFileName);
+//		QEPBuilder builder = new QEPBuilder(HyQoZTestbed.serviceInstancesFileName, HyQoZTestbed.serviceInterfacesFileName);
 		//
 		for(numberOfBindJoins=0; 
 				numberOfBindJoins <numberOfDSs; 

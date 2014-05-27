@@ -1,0 +1,18 @@
+create_hq(1, 0, 0, 0, 0, 0).
+qw([p_op1_op1, r_op1_op1], [], [p_op1_op1, r_op1_op1, in, out], [arc(in, r_op1_op1), arc(r_op1_op1, p_op1_op1), arc(p_op1_op1, out)], in, out,qw).
+cost(14.00, 10.00, 10.00).
+create_hq(1, 0, 0, 0, 0, 1).
+qw([p_op1_op1, r_op1_op1], [], [p_op1_op1, r_op1_op1, in, out], [arc(in, r_op1_op1), arc(r_op1_op1, p_op1_op1), arc(p_op1_op1, out)], in, out,qw).
+cost(14.00, 10.00, 10.00).
+create_hq(1, 0, 0, 0, 1, 0).
+qw([p_op1_op1, r_op1_op1], [], [p_op1_op1, r_op1_op1, in, out], [arc(in, r_op1_op1), arc(r_op1_op1, p_op1_op1), arc(p_op1_op1, out)], in, out,qw).
+cost(14.00, 10.00, 10.00).
+create_hq(1, 0, 0, 1, 0, 0).
+qw([p_op1_op1, f_op1_op1, r_op1_op1], [], [p_op1_op1, in, f_op1_op1, r_op1_op1, out], [arc(r_op1_op1, f_op1_op1), arc(in, r_op1_op1), arc(f_op1_op1, p_op1_op1), arc(p_op1_op1, out)], in, out,qw).
+cost(21.00, 15.00, 15.00).
+create_hq(1, 0, 0, 1, 0, 1).
+qw([p_op1_op1, f_op1_op1, r_op1_op1], [], [p_op1_op1, in, f_op1_op1, r_op1_op1, out], [arc(r_op1_op1, f_op1_op1), arc(in, r_op1_op1), arc(f_op1_op1, p_op1_op1), arc(p_op1_op1, out)], in, out,qw).
+cost(21.00, 15.00, 15.00).
+create_hq(1, 0, 0, 1, 1, 0).
+qw([p_op1_op1, f_op1_op1, r_op1_op1], [], [p_op1_op1, f_op1_op1, in, r_op1_op1, out], [arc(r_op1_op1, f_op1_op1), arc(in, r_op1_op1), arc(f_op1_op1, p_op1_op1), arc(p_op1_op1, out)], in, out,qw).
+cost(21.00, 15.00, 15.00).

@@ -2,12 +2,10 @@ package org.lig.hadas.aesop.syntheticQueryGen;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 
 public class Query {
 	private int numberOfDSs;
@@ -17,16 +15,17 @@ public class Query {
 	private int numberOfNonBlockingProjections;
 	private int numberOfBlockingProjections;
 
+	@SuppressWarnings("unused")
 	private String outputFileName;
 	private String configString;
 
 	private String sco_string;
 	private String hqsl_string;
 
-	private static String plDir          ="/Users/aguacatin/Research/HADAS/PhD/Prolog/qw_generation";
-	private static String configLayout   =plDir+"/config_SynHQGen.pl.layout";
-	private static String condigFileName =plDir+"/config_SynHQGen.pl";
-	private static String generationScript = plDir+"/launchSynHQGen.sh";
+	private static String plDir          ="/Users/aguacatin/Research/HADAS/PhD/Prolog/hyqoz_synHQGen";
+	private static String configLayout   =plDir+"/config.pl.layout";
+	private static String condigFileName =plDir+"/config.pl";
+	private static String generationScript = plDir+"/run.sh";
 
 	private static String NUMBER_OF_DS_KEY                   = "NumberOfDS";
 	private static String NUMBER_OF_BINDINGS_KEY             = "NumberOfBindings";

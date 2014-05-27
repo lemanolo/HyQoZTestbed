@@ -1,0 +1,29 @@
+SELECT op10_op10.op10_op10_i_a, op10_op10.op10_op10_o_a, op10_op10.op10_op10_o_b, op10_op10.op10_op10_o_c, op10_op10.op10_op10_o_d, op10_op10.op10_op10_o_e, op10_op10.op10_op10_o_f, 
+       op12_op12.op12_op12_i_a, op12_op12.op12_op12_o_a, op12_op12.op12_op12_o_f, 
+       op1_op1.op1_op1_i_a, op1_op1.op1_op1_o_a, op1_op1.op1_op1_o_f, 
+       op3_op3.op3_op3_i_a, op3_op3.op3_op3_o_a, op3_op3.op3_op3_o_c, op3_op3.op3_op3_o_e, op3_op3.op3_op3_o_f, 
+       op4_op4.op4_op4_i_a, op4_op4.op4_op4_o_b, op4_op4.op4_op4_o_c, op4_op4.op4_op4_o_e, op4_op4.op4_op4_o_f, 
+       op6_op6.op6_op6_i_a, op6_op6.op6_op6_o_d, op6_op6.op6_op6_o_e, op6_op6.op6_op6_o_f, 
+       op7_op7.op7_op7_i_a, op7_op7.op7_op7_o_c, op7_op7.op7_op7_o_d, op7_op7.op7_op7_o_f, 
+       op8_op8.op8_op8_i_a, op8_op8.op8_op8_o_d, op8_op8.op8_op8_o_e, op8_op8.op8_op8_o_f 
+FROM op10_op10 as op10_op10,
+     op12_op12 as op12_op12,
+     op1_op1 as op1_op1,
+     op3_op3 as op3_op3,
+     op4_op4 as op4_op4,
+     op6_op6 as op6_op6,
+     op7_op7 as op7_op7,
+     op8_op8 as op8_op8 
+WHERE op10_op10.op10_op10_i_a=op3_op3.op3_op3_o_f
+  AND op12_op12.op12_op12_i_a=op7_op7.op7_op7_o_f
+  AND op12_op12.op12_op12_o_a=op8_op8.op8_op8_o_d
+  AND op1_op1.op1_op1_i_a='val_r_op1_op1_i_a'
+  AND op1_op1.op1_op1_o_f=op4_op4.op4_op4_o_c
+  AND op3_op3.op3_op3_i_a='val_r_op3_op3_i_a'
+  AND op3_op3.op3_op3_o_a=op7_op7.op7_op7_o_c
+  AND op4_op4.op4_op4_i_a='val_r_op4_op4_i_a'
+  AND op4_op4.op4_op4_o_b=op10_op10.op10_op10_o_f
+  AND op6_op6.op6_op6_i_a=op3_op3.op3_op3_o_f
+  AND op7_op7.op7_op7_i_a='val_r_op7_op7_i_a'
+  AND op8_op8.op8_op8_i_a='val_r_op8_op8_i_a';
+

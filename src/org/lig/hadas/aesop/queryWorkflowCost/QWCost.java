@@ -15,10 +15,10 @@ import java.util.Set;
 public class QWCost {
 
 
-	private static String plDir          = "/Users/aguacatin/Research/HADAS/PhD/Prolog/qw_generation";
-	private static String configLayout   = plDir+"/config_qw_cost.pl.layout";
-	private static String condigFileName = plDir+"/config_qw_cost.pl";
-	private static String qwCostScript   = plDir+"/run_qw_cost.sh";
+	private static String plDir          = "/Users/aguacatin/Research/HADAS/PhD/Prolog/hyqoz_qwWeighter";
+	private static String configLayout   = plDir+"/config.pl.layout";
+	private static String condigFileName = plDir+"/config.pl";
+	private static String qwCostScript   = plDir+"/run.sh";
 
 	private static String ACTIVITIES ="Activities";
 	private static String PARALLEL   ="Parallel";

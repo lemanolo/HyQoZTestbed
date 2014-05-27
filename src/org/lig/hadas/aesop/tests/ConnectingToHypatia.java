@@ -1,5 +1,6 @@
 package org.lig.hadas.aesop.tests;
 
+import org.lig.hadas.aesop.experiments.HypatiaToHyQoZMapper;
 import org.lig.hadas.aesop.qwderivation.model.QueryWorkflow;
 import org.lig.hadas.hybridqp.QEPBuilder;
 import org.lig.hadas.hybridqp.QEPNode;
@@ -83,7 +84,8 @@ public class ConnectingToHypatia {
 			root = builder.constructQEP(query);
 			Log.on();
 			System.out.println("-----------------------------------------");
-			QueryWorkflow qw = builder.getQW(root);
+			QueryWorkflow qw = HypatiaToHyQoZMapper.getQW(root);
+//			QueryWorkflow qw = builder.getQW(root);
 			System.out.println(qw.toFunctor());
 		} catch (CyclicHypergraphException e) {
 			System.err.println(query+"\n"+e.getMessage());
