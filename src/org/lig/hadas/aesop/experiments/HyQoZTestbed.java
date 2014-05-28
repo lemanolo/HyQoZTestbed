@@ -23,9 +23,11 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.Parser;
 import org.apache.commons.cli.PosixParser;
+import org.lig.hadas.aesop.dtfsDerivation.DTFunctionsCollection;
 import org.lig.hadas.aesop.queryWorkflowCost.PrologQWCostException;
 import org.lig.hadas.aesop.queryWorkflowCost.QWCost;
 import org.lig.hadas.aesop.qwderivation.model.QueryWorkflow;
+import org.lig.hadas.aesop.syntheticQueryGen.PrologGeneratorException;
 import org.lig.hadas.aesop.syntheticQueryGen.Query;
 import org.lig.hadas.aesop.syntheticQueryGen.QueryGenerationListener;
 import org.lig.hadas.aesop.syntheticQueryGen.SynHQGenWrapper;
@@ -33,6 +35,7 @@ import org.lig.hadas.hybridqp.QEPBuilder;
 import org.lig.hadas.hybridqp.QEPNode;
 import org.lig.hadas.hybridqp.Exceptions.CyclicHypergraphException;
 import org.lig.hadas.hybridqp.Log.Log;
+import org.lig.hadas.hybridqp.Log.Log.out;
 
 
 public class HyQoZTestbed{
@@ -42,147 +45,157 @@ public class HyQoZTestbed{
 
 	static{
 		@SuppressWarnings("static-access")
-		Option genshqs = OptionBuilder.withArgName("n=value")
-				.withValueSeparator()
-				.hasArgs(2)
-				.withDescription("Generation of synthetic hqs")
-				.create("genshqs");
+		Option genshqs = OptionBuilder.withDescription("Generation of synthetic hqs")
+		.create("genshqs");
 
-				@SuppressWarnings("static-access")
-				Option Noption   = OptionBuilder
-						.withDescription(  "Upper bound" )
-						.hasArg()
-						.create( "N" );
-		
-				@SuppressWarnings("static-access")
-				Option outputdir   = OptionBuilder
-						.withDescription(  "Output directory" )
-						.hasArg()
-						.create( "outputdir" );
+		@SuppressWarnings("static-access")
+		Option noption   = OptionBuilder
+		.withDescription(  "Lower bound" )
+		.hasArg()
+		.create( "n" );
+
+		@SuppressWarnings("static-access")
+		Option Noption   = OptionBuilder
+		.withDescription(  "Upper bound" )
+		.hasArg()
+		.create( "N" );
+
+		@SuppressWarnings("static-access")
+		Option outputdir   = OptionBuilder
+		.withDescription(  "Output directory" )
+		.hasArg()
+		.create( "outputdir" );
+
+		@SuppressWarnings("static-access")
+		Option forcegenshqs   = OptionBuilder
+		.withDescription(  "Force synthetic HQ generation" )
+		.create( "forcegenshqs" );
 
 		@SuppressWarnings("static-access")
 		Option derive = OptionBuilder
-				.withDescription("Derivation of the dt-functions")
-				.create("derive");
+		.withDescription("Derivation of the dt-functions")
+		.create("derive");
 
-				@SuppressWarnings("static-access")
-				Option hqsignature   = OptionBuilder
-						.withDescription(  "Hybrid query signature" )
-						.hasOptionalArg()
-						.create( "hqsignature" );
+		@SuppressWarnings("static-access")
+		Option hqsignature   = OptionBuilder
+		.withDescription(  "Hybrid query signature" )
+		.hasOptionalArg()
+		.create( "hqsignature" );
 
-				@SuppressWarnings("static-access")
-				Option sco   = OptionBuilder
-						.withDescription(  "SCO expression" )
-						.hasOptionalArg()
-						.create( "sco" );
-	
-				@SuppressWarnings("static-access")
-				Option inputfile   = OptionBuilder
-						.withDescription(  "Input file" )
-						.hasArg()
-						.create( "inputfile" );
-				
-				@SuppressWarnings("static-access")
-				Option outputfile   = OptionBuilder
-						.withDescription(  "Output file" )
-						.hasArg()
-						.create( "outputfile" );
+		@SuppressWarnings("static-access")
+		Option sco   = OptionBuilder
+		.withDescription(  "SCO expression" )
+		.hasOptionalArg()
+		.create( "sco" );
+
+		@SuppressWarnings("static-access")
+		Option inputfile   = OptionBuilder
+		.withDescription(  "Input file" )
+		.hasArg()
+		.create( "inputfile" );
+
+		@SuppressWarnings("static-access")
+		Option outputfile   = OptionBuilder
+		.withDescription(  "Output file" )
+		.hasArg()
+		.create( "outputfile" );
 
 		@SuppressWarnings("static-access")		
 		Option generate = OptionBuilder
-				.withDescription("Generation of alternative query workflows")
-				.create("generate");
-			
-				@SuppressWarnings("static-access")
-				Option typenames   = OptionBuilder
-						.withDescription(  "Type names in the list format \"[type_name(Alias, S::M),...]\" " )
-						.hasArg()
-						.create( "typenames" );
-				
-				@SuppressWarnings("static-access")
-				Option dtfs   = OptionBuilder
-						.withDescription(  "dt-functions in the list format \"[dtf(A,E,P,ID),...]\" " )
-						.hasArg()
-						.create( "dtfs" );
-				
-				@SuppressWarnings("static-access")
-				Option controlflow   = OptionBuilder
-						.withDescription(  "Defines the generetion by control-flow" )
-						.create( "controlflow" );
-				
-				@SuppressWarnings("static-access")
-				Option dataflow   = OptionBuilder
-						.withDescription(  "Defines the generetion by data-flow" )
-						.create( "dataflow" );
+		.withDescription("Generation of alternative query workflows")
+		.create("generate");
+
+		@SuppressWarnings("static-access")
+		Option typenames   = OptionBuilder
+		.withDescription(  "Type names in the list format \"[type_name(Alias, S::M),...]\" " )
+		.hasArg()
+		.create( "typenames" );
+
+		@SuppressWarnings("static-access")
+		Option dtfs   = OptionBuilder
+		.withDescription(  "dt-functions in the list format \"[dtf(A,E,P,ID),...]\" " )
+		.hasArg()
+		.create( "dtfs" );
+
+		@SuppressWarnings("static-access")
+		Option controlflow   = OptionBuilder
+		.withDescription(  "Defines the generetion by control-flow" )
+		.create( "controlflow" );
+
+		@SuppressWarnings("static-access")
+		Option dataflow   = OptionBuilder
+		.withDescription(  "Defines the generetion by data-flow" )
+		.create( "dataflow" );
 
 		@SuppressWarnings("static-access")		
 		Option weight = OptionBuilder
-				.withDescription("Weighting of quwey workflows")
-				.create("weight");
-		
-				@SuppressWarnings("static-access")
-				Option qw   = OptionBuilder
-						.withDescription(  "Query workflow in functor sytax \"qw/6\" " )
-						.hasArg()
-						.create( "qw" );
-				
-				@SuppressWarnings("static-access")
-				Option sla   = OptionBuilder
-						.withDescription(  "SLA in functor syntax \"sla/3\" " )
-						.hasArg()
-						.create( "sla" );		
-	
+		.withDescription("Weighting of quwey workflows")
+		.create("weight");
+
+		@SuppressWarnings("static-access")
+		Option qw   = OptionBuilder
+		.withDescription(  "Query workflow in functor sytax \"qw/6\" " )
+		.hasArg()
+		.create( "qw" );
+
+		@SuppressWarnings("static-access")
+		Option sla   = OptionBuilder
+		.withDescription(  "SLA in functor syntax \"sla/3\" " )
+		.hasArg()
+		.create( "sla" );		
+
 		@SuppressWarnings("static-access")		
 		Option select = OptionBuilder
-				.withDescription("Selection of the solution space of query workflows")
-				.create("select");
-		
-				@SuppressWarnings("static-access")
-				Option k   = OptionBuilder
-						.withDescription(  "'k' for the top-k selection " )
-						.hasArg()
-						.create( "k" );
-						
+		.withDescription("Selection of the solution space of query workflows")
+		.create("select");
+
+		@SuppressWarnings("static-access")
+		Option k   = OptionBuilder
+		.withDescription(  "'k' for the top-k selection " )
+		.hasArg()
+		.create( "k" );
+
 		OptionGroup optgroup = new OptionGroup();
 		optgroup.addOption(genshqs)
-				.addOption(derive)
-				.addOption(generate)
-				.addOption(weight)
-				.addOption(select);;
+		.addOption(derive)
+		.addOption(generate)
+		.addOption(weight)
+		.addOption(select);
 
 		options.addOptionGroup(optgroup);
 
-			//-genshqs options
-			options.addOption(Noption)
-				.addOption(outputdir);
+		//-genshqs options
+		options.addOption(noption)
+		.addOption(Noption)
+		.addOption(outputdir)
+		.addOption(forcegenshqs);
 
-			//-derive options
-			options.addOption(hqsignature)
-				.addOption(sco)
-				.addOption(inputfile)
-				.addOption(outputfile);
+		//-derive options
+		options.addOption(hqsignature)
+		.addOption(sco)
+		.addOption(inputfile)
+		.addOption(outputfile);
 
-			//-generate options			
-			options.addOption(typenames)
-				.addOption(typenames)
-				.addOption(dtfs)
-				//.addOption(inputfile)
-				//.addOption(output)
-				.addOption(controlflow)
-				.addOption(dataflow);
-			
-			//-weight options
-			options.addOption(qw)
-				.addOption(sla);
-				//.addOption(inputfile)
-				//.addOption(output)
+		//-generate options			
+		options.addOption(typenames)
+		.addOption(typenames)
+		.addOption(dtfs)
+		//.addOption(inputfile)
+		//.addOption(output)
+		.addOption(controlflow)
+		.addOption(dataflow);
 
-			//-select options
-			options.addOption(k);
-				//.addOption(sla)
-				//.addOption(inputfile)
-				//.addOption(output)
+		//-weight options
+		options.addOption(qw)
+		.addOption(sla);
+		//.addOption(inputfile)
+		//.addOption(output)
+
+		//-select options
+		options.addOption(k);
+		//.addOption(sla)
+		//.addOption(inputfile)
+		//.addOption(output)
 	}
 
 
@@ -195,12 +208,15 @@ public class HyQoZTestbed{
 	//Parameters
 	private static String CHOSEN_OPTION = null;
 	private static int n =0, N=0;
-	private static String SYNTHETIC_QUERIES_DIR = null;
-	
-	private static String HQ_SIGNATURE = null;
-	private static String SCO          = null;
-	private static String INPUT_FILE   = null;
-	
+	private static String OUTPUT_DIR = null;
+	private static boolean FORCE_HQ_GENERATION=false;
+
+	private static String  HQ_SIGNATURE        = null;
+	private static boolean HQ_SIGNATURE_OPTION = false;
+	private static String  SCO                 = null;
+	private static boolean SCO_OPTION          = false;
+	private static String  INPUT_FILE          = null;
+
 	private static String OUTPUT_FILE  = null;
 
 	private static String TYPE_NAMES   = null;
@@ -213,44 +229,147 @@ public class HyQoZTestbed{
 	private static String SLA          = null;
 
 	private static int K               = 0;
-	
-	
-	public static void main(String[] args) {
+
+
+
+
+	public static void main(String[] args) throws Exception {
 
 		validateCommandLine(args);
-		System.exit(0);
-		HyQoZTestbed experiments = new HyQoZTestbed();
-		//		int n=Integer.valueOf(args[0]);
-		//		int N=Integer.valueOf(args[1]);
 
-		boolean forceQueryCreation = true;
-		Log.off();
-		HashMap<Integer, File>  syntheticQueryFiles = experiments.generateSyntheticHQs(n, N, forceQueryCreation);
-		Log.on();
+		HyQoZTestbed hyqozTestbed = new HyQoZTestbed();
 
 		boolean forceQWCreation = true;
-		HashMap<Integer, File>  hypatiaQueryWorkflowsFiles = experiments.generateHypatiaQWs(n, N, syntheticQueryFiles, forceQWCreation);
-
 		boolean forceCostComputation= true;
-		@SuppressWarnings("unused")
-		HashMap<Integer, File> hypatiaQueryWorkglowsWithCostsFiles = experiments.computeQWCost(n,N,hypatiaQueryWorkflowsFiles,forceCostComputation);
+
+		if(CHOSEN_OPTION.equalsIgnoreCase("genshqs")){
+			System.out.println(CHOSEN_OPTION+" -n "+HyQoZTestbed.n+" -N "+HyQoZTestbed.N +" -outputdir "+HyQoZTestbed.OUTPUT_DIR);
+			Log.off();
+			HashMap<Integer, File>  syntheticQueryFiles = hyqozTestbed.generateSyntheticHQs();
+			Log.on();
+		}else if(CHOSEN_OPTION.equalsIgnoreCase("derive")){
+
+			if(HyQoZTestbed.HQ_SIGNATURE_OPTION){
+				if(HyQoZTestbed.HQ_SIGNATURE!=null){
+					System.out.println(CHOSEN_OPTION+" -hqsignature "+HyQoZTestbed.HQ_SIGNATURE+" -outputfile "+HyQoZTestbed.OUTPUT_FILE);
+					String [] StrSignature = HyQoZTestbed.HQ_SIGNATURE.split("_");
+
+					if(StrSignature.length==6){
+						try {
+							int numberOfDSs                    = Integer.valueOf(StrSignature[0]);
+							int numberOfBindJoins              = Integer.valueOf(StrSignature[1]);
+							int numberOfJoins                  = Integer.valueOf(StrSignature[2]);
+							int numberOfFilterings             = Integer.valueOf(StrSignature[3]);
+							int numberOfBlockingProjections    = Integer.valueOf(StrSignature[4]);
+							int numberOfNonBlockingProjections = Integer.valueOf(StrSignature[5]);
+
+							//							System.out.println("                   numberOfDSs: "+numberOfDSs);             
+							//							System.out.println("             numberOfBindJoins: "+numberOfBindJoins);             
+							//							System.out.println("                 numberOfJoins: "+numberOfJoins);                 
+							//							System.out.println("            numberOfFilterings: "+numberOfFilterings);
+							//							System.out.println("   numberOfBlockingProjections: "+numberOfBlockingProjections);  
+							//							System.out.println("numberOfNonBlockingProjections: "+numberOfNonBlockingProjections);
+							//							System.out.println(numberOfDSs == (numberOfBindJoins+numberOfJoins +1));
+							//							System.out.println(numberOfDSs >= numberOfFilterings);
+							//							System.out.println(numberOfDSs >= (numberOfBlockingProjections + numberOfNonBlockingProjections));
+
+							File outputFile = null;
+							try {
+								outputFile = HyQoZTestbed.createOutputFile(HyQoZTestbed.OUTPUT_FILE);
+							} catch (IOException e) {
+								System.err.format("Error creating file '%s' \n %s\n",HyQoZTestbed.OUTPUT_FILE,e.getMessage());
+								e.printStackTrace();
+								System.exit(1);
+							}
+							
+							FileWriter fw = new FileWriter(outputFile.getAbsoluteFile());
+							BufferedWriter bw = new BufferedWriter(fw);
+
+							Query q=new Query(numberOfDSs, 
+									numberOfBindJoins, 
+									numberOfJoins, 
+									numberOfFilterings, 
+									numberOfBlockingProjections, 
+									numberOfNonBlockingProjections);
+
+							
+							DTFunctionsCollection dtfCollection = new DTFunctionsCollection(q.getSco());
+							
+							System.out.println("  SCO: "+dtfCollection.getSco_string());
+							System.out.println("TYPES: "+dtfCollection.getTypes_string().replaceAll("type_name\\(", "\n\ttype_name("));
+							System.out.println(" DTFS: "+dtfCollection.getDtfs_string().replaceAll("dtf\\(", "\n\tdtf("));
+							bw.write(HyQoZTestbed.HQ_SIGNATURE);
+							bw.write("\n"+q.getSco());
+							bw.write("\n"+dtfCollection.getTypes_string());
+							bw.write("\n"+dtfCollection.getDtfs_string());
+							bw.write("\n"+q.getHqsl());
+							bw.close();	
+							
+						} catch (PrologGeneratorException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (Exception e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+					else{
+						throw new Exception("HQ signature syntax error: '"+HyQoZTestbed.HQ_SIGNATURE+"'");
+					}
+				}else if(HyQoZTestbed.INPUT_FILE != null){
+					System.out.println(CHOSEN_OPTION+" -hqsignature -inputfile "+HyQoZTestbed.INPUT_FILE+" -outputfile "+HyQoZTestbed.OUTPUT_FILE);
+
+				}
+			}else if(HyQoZTestbed.SCO_OPTION){
+				if(HyQoZTestbed.SCO!=null){
+					System.out.println(CHOSEN_OPTION+" -sco "+HyQoZTestbed.SCO+" -outputfile "+HyQoZTestbed.OUTPUT_FILE);
+				}else if(HyQoZTestbed.INPUT_FILE != null){
+					System.out.println(CHOSEN_OPTION+" -sco -inputfile "+HyQoZTestbed.INPUT_FILE+" -outputfile "+HyQoZTestbed.OUTPUT_FILE);
+
+				}
+			}
+
+		}else if(CHOSEN_OPTION.equalsIgnoreCase("generate")){
+			//HashMap<Integer, File>  hypatiaQueryWorkflowsFiles = hyqozTestbed.generateHypatiaQWs(n, N, syntheticQueryFiles, forceQWCreation);
+
+		}else if(CHOSEN_OPTION.equalsIgnoreCase("weight")){
+
+		}else if(CHOSEN_OPTION.equalsIgnoreCase("select")){
+
+		}
+		//		@SuppressWarnings("unused")
+		//		HashMap<Integer, File> hypatiaQueryWorkglowsWithCostsFiles = hyqozTestbed.computeQWCost(n,N,hypatiaQueryWorkflowsFiles,forceCostComputation);
 	}
 
-	public HashMap<Integer, File>  generateSyntheticHQs(int n, int N, boolean forceQueryCreation) {
 
+	//+Creating the output file including the parent directory (if required)	
+	private static File createOutputFile(String outputFilePath) throws IOException{
 
+		File outputFile = new File(outputFilePath);
+		if(outputFile.getParent()!=null){
+			File parentDir = new File(outputFile.getParent());
+			if(!parentDir.exists()) parentDir.mkdirs();
+		}
+		if(outputFile.exists()) outputFile.delete();
+		
+		outputFile.createNewFile();
 
+		return outputFile;
+	}
+	//-Creating the output file including the parent directory (if required)
+
+	public HashMap<Integer, File>  generateSyntheticHQs() {
 		HashMap<Integer, Boolean>        createFiles     = new HashMap<Integer, Boolean>();
 		HashMap<Integer, String>         fileNames       = new HashMap<Integer, String>();
 		HashMap<Integer, File>           files           = new HashMap<Integer, File>();
 		final HashMap<Integer, BufferedWriter> bufferedWriters = new HashMap<Integer, BufferedWriter>();
 
 
-		for(int i = n; i <= N; i++){
+		for(int i = HyQoZTestbed.n; i <= HyQoZTestbed.N; i++){
 			createFiles.put(i, new Boolean(false));
-			String fileName = String.format("%s/%s_DSs.txt", HyQoZTestbed.SYNTHETIC_QUERIES_DIR,String.valueOf(i)); 
+			String fileName = String.format("%s/%s_DSs.txt", HyQoZTestbed.OUTPUT_DIR,String.valueOf(i)); 
 			File file = new File(fileName);
-			if((file.exists() && forceQueryCreation) || !file.exists()){
+			if((file.exists() && HyQoZTestbed.FORCE_HQ_GENERATION) || !file.exists()){
 				fileNames.put(i, fileName);
 				createFiles.remove(i);
 				createFiles.put(i, new Boolean(true));
@@ -295,9 +414,10 @@ public class HyQoZTestbed{
 		ArrayList<Query> queryList = null;
 
 		for (int i = n; i <= N; i++) {
-			System.out.println(String.format("\n ... %d DSs ... ", i));
+
 
 			if(createFiles.get(i)){
+				System.out.println();
 				queryList = querySignatureGenerator.generateSyntheticHQsFor(i);
 				try {
 					if(queryList.size()==querySignatureGenerator.totalOfQueries(i)){
@@ -307,14 +427,14 @@ public class HyQoZTestbed{
 						files.remove(i);
 						files.put(i, file);
 						if(incompleteFile.renameTo(file))
-							System.out.println(String.format("\nThe [%d] queries for %d DSs are COMPLETE and SAVED into the file %s", queryList.size(),i, file.getPath()));
+							System.out.print(String.format("\tThe [%d] queries for %d DSs are COMPLETE and SAVED into the file %s", queryList.size(),i, file.getPath()));
 						else{
 							file.delete();
-							System.out.println(String.format("\nThe [%d] queries for %d DSs are COMLETE and SAVED in the temporary file %s (because of a permissions problem)", queryList.size(), i, incompleteFile.getPath()));
+							System.out.print(String.format("\n\tThe [%d] queries for %d DSs are COMLETE and SAVED in the temporary file %s (because of a permissions problem)", queryList.size(), i, incompleteFile.getPath()));
 						}
 					}
 					else{
-						System.out.println(String.format("\nThe [%d] queries for %d DSs are INCOMPLETE and SAVED into the file %s", queryList.size(), i, files.get(i).getPath()));
+						System.out.print(String.format("\n\tThe [%d] queries for %d DSs are INCOMPLETE and SAVED into the file %s", queryList.size(), i, files.get(i).getPath()));
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -608,6 +728,7 @@ public class HyQoZTestbed{
 		return files;
 	}
 
+
 	private static void validateCommandLine(String [] args){
 		CommandLineParser parser = new PosixParser(); 
 		HelpFormatter formatter  = new HelpFormatter();
@@ -622,30 +743,41 @@ public class HyQoZTestbed{
 			e.printStackTrace();
 			System.exit(1);
 		}
-	//+Synthetic HQ generation
+		//+Synthetic HQ generation
 		if(line.hasOption("genshqs")){
 			CHOSEN_OPTION="genshqs";
 			try {
-				Properties properties = line.getOptionProperties("genshqs");
-				n = Integer.valueOf(properties.getProperty("n"));
+				if(line.hasOption("n"))
+					n = Integer.valueOf(line.getOptionValue("n"));
+				else{
+					formatter.printHelp( "hyqoztb", options );
+					System.exit(1);
+				}
+
 				if(line.hasOption("N"))
 					N = Integer.valueOf(line.getOptionValue("N"));
 				else
 					N=n;
+
+				if(line.hasOption("forcegenshqs"))
+					FORCE_HQ_GENERATION=true;
+				else
+					FORCE_HQ_GENERATION=false;
+
 			} catch (NumberFormatException e) {
 				formatter.printHelp( "hyqoztb", options );
 				e.printStackTrace();
 				System.exit(1);
 			}
 			if(line.hasOption("outputdir")){
-				SYNTHETIC_QUERIES_DIR = line.getOptionValue("outputdir");
-				File f = new File(SYNTHETIC_QUERIES_DIR);
+				OUTPUT_DIR = line.getOptionValue("outputdir");
+				File f = new File(OUTPUT_DIR);
 				if (! f.exists()){
-					System.err.println("The directory '"+ SYNTHETIC_QUERIES_DIR + "' does not exist");
+					System.err.println("The directory '"+ OUTPUT_DIR + "' does not exist");
 					System.exit(1);
 				}
 				if(!f.isDirectory()){
-					System.err.println("The path '"+ SYNTHETIC_QUERIES_DIR + "' does not correspond to a directory");
+					System.err.println("The path '"+ OUTPUT_DIR + "' does not correspond to a directory");
 					System.exit(1);
 				}
 			}
@@ -657,17 +789,19 @@ public class HyQoZTestbed{
 			System.out.println("[CML] -"+CHOSEN_OPTION);
 			System.out.println("[CML] n="+n);
 			System.out.println("[CML] N="+N);
-			System.out.println("[CML] -outputdir '"+SYNTHETIC_QUERIES_DIR+"'");
-			
+			System.out.println("[CML] -outputdir '"+OUTPUT_DIR+"'");
+
 			return;
 		}
-	//-Synthetic HQ generation
-	
-	//+Derivation of dt-functions
+		//-Synthetic HQ generation
+
+		//+Derivation of dt-functions
 		if(line.hasOption("derive")){
 			CHOSEN_OPTION="derive";
 			if(line.hasOption("hqsignature") ^ line.hasOption("sco")){
 				if(line.hasOption("hqsignature")){
+					HQ_SIGNATURE_OPTION=true;
+					SCO_OPTION=false;
 					HQ_SIGNATURE = null;
 					if((HQ_SIGNATURE=line.getOptionValue("hqsignature"))!=null ^ line.hasOption("inputfile") ){
 						if(HQ_SIGNATURE != null){
@@ -694,9 +828,11 @@ public class HyQoZTestbed{
 						System.err.println("Option '-hqsignature <hqsignature>' xor '-hqsignature -inputfile <filename>' required for '-derive'");
 						System.exit(1);
 					}
-	
+
 				}
 				if(line.hasOption("sco")){
+					HQ_SIGNATURE_OPTION=false;
+					SCO_OPTION=true;
 					SCO = null;
 					if((SCO=line.getOptionValue("sco"))!=null ^ line.hasOption("inputfile") ){
 						if(SCO != null){
@@ -739,17 +875,17 @@ public class HyQoZTestbed{
 				System.err.println("Option '-hqsignature <hqsignature>' xor '-sco <sco>' required for '-derive'");
 				System.exit(1);
 			}
-				
+
 		}
-	//-Derivation of dt-functions
-		
-	//+Generation of query workflows
+		//-Derivation of dt-functions
+
+		//+Generation of query workflows
 		if(line.hasOption("generate")){
 			CHOSEN_OPTION="generate";
 			System.out.println("[CML] -"+CHOSEN_OPTION);
 			if( (line.hasOption("typenames") && line.hasOption("dtfs"))
-				^ 
-				line.hasOption("inputfile")){
+					^ 
+					line.hasOption("inputfile")){
 				if(line.hasOption("typenames") && line.hasOption("dtfs")){
 					TYPE_NAMES  = line.getOptionValue("typenames");
 					DTFS = line.getOptionValue("dtfs");
@@ -769,14 +905,14 @@ public class HyQoZTestbed{
 					}
 					System.out.println("[CML] -inputfile "+INPUT_FILE);
 				}
-				
+
 			}
 			else{
 				formatter.printHelp( "hyqoztb", options );
 				System.err.println("Option '-typenames <typenames> -dtfs <dtfs>' xor '-inputfile <filename>' required for '-generate'");
 				System.exit(1);
 			}
-			
+
 			if(line.hasOption("controlflow") ^ line.hasOption("dataflow")){
 				CONTROLFLOW = Boolean.valueOf(line.hasOption("controlflow"));
 				DATAFLOW = !CONTROLFLOW;
@@ -788,7 +924,7 @@ public class HyQoZTestbed{
 				System.err.println("Option '-controflow' xor '-dataflow' required for '-generate'");
 				System.exit(1);
 			}
-			
+
 			if(line.hasOption("outputfile")){
 				OUTPUT_FILE = line.getOptionValue("outputfile");
 				System.out.println("[CML] -outputfile "+OUTPUT_FILE);
@@ -798,17 +934,17 @@ public class HyQoZTestbed{
 				System.err.println("Option '-outputfile <filename>' required for '-generate'");
 				System.exit(1);
 			}
-				
+
 		}
-	//-Generation of query workflows	
-		
-	//+Weighting of query workflows
+		//-Generation of query workflows	
+
+		//+Weighting of query workflows
 		if(line.hasOption("weight")){
 			CHOSEN_OPTION="weight";
 			System.out.println("[CML] -"+CHOSEN_OPTION);
 			if( (line.hasOption("qw") || line.hasOption("sla"))
-				^ 
-				line.hasOption("inputfile")){
+					^ 
+					line.hasOption("inputfile")){
 				if(line.hasOption("qw") && line.hasOption("sla") && !line.hasOption("inputfile")){
 					QW  = line.getOptionValue("qw");
 					SLA = line.getOptionValue("sla");
@@ -839,7 +975,7 @@ public class HyQoZTestbed{
 				System.err.println("Option '-qw <qw> -sla <sla>' xor '-inputfile <filename>' required for '-weight'");
 				System.exit(1);
 			}
-	
+
 			if(line.hasOption("outputfile")){
 				OUTPUT_FILE = line.getOptionValue("outputfile");
 				System.out.println("[CML] -outputfile "+OUTPUT_FILE);
@@ -850,10 +986,10 @@ public class HyQoZTestbed{
 				System.exit(1);
 			}	
 		}
-	//-Weighting of query workflows	
-	
-		
-	//+Selection of the solution space
+		//-Weighting of query workflows	
+
+
+		//+Selection of the solution space
 		if(line.hasOption("select")){
 			CHOSEN_OPTION="select";
 			System.out.println("[CML] -"+CHOSEN_OPTION);
@@ -869,10 +1005,10 @@ public class HyQoZTestbed{
 					System.exit(1);
 				}
 				System.out.println("[CML] -inputfile "+INPUT_FILE);
-				
+
 				SLA = line.getOptionValue("sla");
 				System.out.println("[CML] -sla "+SLA);
-				
+
 				try {
 					K = Integer.valueOf(line.getOptionValue("k"));
 					System.out.println("[CML] -k "+K);
@@ -883,14 +1019,14 @@ public class HyQoZTestbed{
 					System.exit(1);
 				}
 			}
-			
+
 			else{
 				formatter.printHelp( "hyqoztb", options );
 				System.err.println("Option '-inputfile <filename> -sla <sla> -k <k>' required for '-select'");
 				System.exit(1);
 			}
-	
-			
+
+
 			if(line.hasOption("outputfile")){
 				OUTPUT_FILE = line.getOptionValue("outputfile");
 				System.out.println("[CML] -outputfile "+OUTPUT_FILE);
@@ -901,7 +1037,7 @@ public class HyQoZTestbed{
 				System.exit(1);
 			}	
 		}
-	//-Selection of the solution space
+		//-Selection of the solution space
 	}
 
 }

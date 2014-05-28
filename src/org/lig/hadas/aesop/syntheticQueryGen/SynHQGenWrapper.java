@@ -11,7 +11,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
 
 public class SynHQGenWrapper {
-	private DecimalFormat format = new DecimalFormat( "###.00%" );
+	private DecimalFormat format = new DecimalFormat( "#0.00%" );
 
 	private ArrayList<QueryGenerationListener> listeners;
 	public SynHQGenWrapper() {
@@ -56,21 +56,20 @@ public class SynHQGenWrapper {
 		}
 		return queries;
 	}
+	
 	public ArrayList<Query> generateSyntheticHQsFor(int numberOfDSs) {
 		ArrayList<Query> result = new ArrayList<Query>();
-		//		int length = this.totalOfQueries(numberOfDSs);
-		//		Query [] result  = new Query [this.totalOfQueries(numberOfDSs)];
+
 
 		int numberOfBindJoins;
 		int numberOfJoins;
 		int numberOfFilterings;
 		int numberOfNonBlockingProjections;
 		int numberOfBlockingProjections;
-		//		System.out.println("#ofDSs: "+numberOfDSs +"\t #ofQueries: "+length);
+
 		int count = 0;
-		//
-//		QEPBuilder builder = new QEPBuilder(HyQoZTestbed.serviceInstancesFileName, HyQoZTestbed.serviceInterfacesFileName);
-		//
+
+
 		for(numberOfBindJoins=0; 
 				numberOfBindJoins <numberOfDSs; 
 				numberOfBindJoins++){
@@ -79,7 +78,7 @@ public class SynHQGenWrapper {
 			for (numberOfFilterings = 0;
 					//BEGIN filterings
 					//numberOfFilterings <= 0; //filterings only add complexity to the generation but they do not affect the proper aspects of the qw generation (e.g. deadlock relations)
-										numberOfFilterings <= numberOfDSs; 
+					numberOfFilterings <= numberOfDSs; 
 					//END filterings
 					numberOfFilterings++) {
 				for (numberOfBlockingProjections = 0; 
@@ -88,8 +87,6 @@ public class SynHQGenWrapper {
 					for ( numberOfNonBlockingProjections = 0; 
 							numberOfNonBlockingProjections <= numberOfDSs - numberOfBlockingProjections; 
 							numberOfNonBlockingProjections++) {
-
-
 						try {
 
 							boolean cyclic = true;
@@ -117,7 +114,8 @@ public class SynHQGenWrapper {
 								count++;
 
 								double progress = ((double)count)/((double)this.totalOfQueries(numberOfDSs));
-								System.out.println(String.format("%s", format.format(progress)));
+								if(count>0) System.out.print("\r");
+								System.out.print(String.format(" [%8s] ... %3s DSs ... ", format.format(progress),String.valueOf(numberOfDSs)));
 
 
 								//								} catch (CyclicHypergraphException e) {
@@ -136,15 +134,16 @@ public class SynHQGenWrapper {
 						} catch (PrologGeneratorException e) {
 							e.printStackTrace();
 							return result;
+						} catch (Exception e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
 						}
-
 						//						System.out.println(String.format("[%d]\t %s", i++, q.toDebbugingString().replaceAll("\n", "\n\t")));
 					}
 
 				}
 			}
 		}
-
 
 		return result;
 
@@ -166,10 +165,10 @@ public class SynHQGenWrapper {
 				(numberOfDSs+1)* 
 				((numberOfDSs+1)*(numberOfDSs+2)/2)
 				);
-//		return (int)( numberOfDSs* 
-//				//(numberOfDSs+1)* //filtering 
-//				((numberOfDSs+1)*(numberOfDSs+2)/2)
-//				);
+		//		return (int)( numberOfDSs* 
+		//				//(numberOfDSs+1)* //filtering 
+		//				((numberOfDSs+1)*(numberOfDSs+2)/2)
+		//				);
 		//END filterings
 	}
 }
