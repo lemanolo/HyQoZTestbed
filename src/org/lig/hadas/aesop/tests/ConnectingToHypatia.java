@@ -1,7 +1,7 @@
 package org.lig.hadas.aesop.tests;
 
 import org.lig.hadas.aesop.experiments.HypatiaToHyQoZMapper;
-import org.lig.hadas.aesop.qwderivation.model.QueryWorkflow;
+import org.lig.hadas.aesop.qwGeneration.model.QueryWorkflow;
 import org.lig.hadas.hybridqp.QEPBuilder;
 import org.lig.hadas.hybridqp.QEPNode;
 import org.lig.hadas.hybridqp.Exceptions.CyclicHypergraphException;

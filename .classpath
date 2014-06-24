@@ -7,9 +7,11 @@
 	<classpathentry exported="true" kind="lib" path="/Users/aguacatin/development/commons-logging-1.1.1/commons-logging-1.1.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="/Users/aguacatin/development/commons-lang-2.6/commons-lang-2.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="/Users/aguacatin/development/guava-14-rc1.jar"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.lig.hadas.aesop.qwderivation"/>
 	<classpathentry kind="lib" path="/Users/aguacatin/Research/HADAS/workspace_hypatia/ServiceCatalog/dist/lib/servicecatalog.jar"/>
 	<classpathentry kind="lib" path="/Users/aguacatin/Research/HADAS/workspace_hypatia/Hypatia/dist/lib/hypatia.jar"/>
 	<classpathentry kind="lib" path="/Users/aguacatin/development/commons-cli-1.2/commons-cli-1.2.jar"/>
+	<classpathentry kind="lib" path="/Users/aguacatin/development/jgraphx/lib/jgraphx.jar"/>
+	<classpathentry kind="lib" path="/Users/aguacatin/development/commons-exec-1.2/commons-exec-1.2.jar"/>
+	<classpathentry kind="lib" path="/Users/aguacatin/development/commons-codec-1.9/commons-codec-1.9.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

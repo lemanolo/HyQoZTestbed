@@ -8,8 +8,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import org.lig.hadas.aesop.experiments.HyQoZTestbed;
-
 public class Query {
 	private int numberOfDSs;
 	private int numberOfBindJoins;
